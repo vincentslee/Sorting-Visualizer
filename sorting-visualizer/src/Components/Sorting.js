@@ -120,7 +120,7 @@ function Sorting({pause}) {
 
     const [smallest, setSmallest] = useState(0);
     function SelectionSort(array){
-      if (idx <= array.length-1){
+      if (idx < array.length-1){
         array.forEach(element => {
           element.color = SetColor(element.value);
         });
@@ -141,6 +141,8 @@ function Sorting({pause}) {
           setIdx(idx+1);
           setCount(idx);
         }
+      } else {
+        array = Swap(idx, idx-1, array);
       }
       setData(array);
     }
