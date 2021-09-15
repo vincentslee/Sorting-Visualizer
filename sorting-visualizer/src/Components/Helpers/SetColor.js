@@ -1,3 +1,3 @@
 export default function (num) {
-    return 'rgb('+num*2+','+num*3+','+num*5+')';
+    return 'rgb('+num*5+','+num*5+','+num*5+')';
 }

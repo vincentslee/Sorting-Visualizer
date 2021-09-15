@@ -87,7 +87,7 @@ button:active {
   max-width: 500px;
   margin-left: 10px;
 }
-.example-thumb {
+.thumb {
   cursor: pointer;
   position: absolute;
   z-index: 100;
@@ -95,20 +95,20 @@ button:active {
   border: 5px solid white;
   display: block;
 }
-.example-track {
+.track {
   position: relative;
   background: white;
   border: 1px solid black;
 }
-.example-track.example-track-0 {
+.track.track-0 {
   background: black;
   border: 1px solid white;
 }
-.horizontal-slider .example-track {
+.horizontal-slider .track {
   top: 20px;
   height: 10px;
 }
-.horizontal-slider .example-thumb {
+.horizontal-slider .thumb {
   top: 12px;
   width: 30px;
   outline: none;

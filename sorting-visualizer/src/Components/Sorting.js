@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer, useRef} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import ReactSlider from 'react-slider'
 import Swap from './Helpers/Swap';
 import SetColor from './Helpers/SetColor';
@@ -47,10 +47,16 @@ function Sorting({pause}) {
         case 0:
           break;
         case 1:
+          console.log('bubble')
           BubbleSort(data);
           break;
         case 2:
+          console.log('insertion')
           InsertionSort(data);
+          break;
+        case 3:
+          console.log('selection')
+          SelectionSort(data);
           break;
       }
       // the below value determines the delay between ticks in milliseconds, as set by 'speed'
@@ -59,19 +65,16 @@ function Sorting({pause}) {
     const [sorted, setSorted] = useState(false);
 
     function BubbleSort(array){
-
         setCount(count+1)
         if (count < array.length - 1) {
             // if the next value is smaller, swap the two values
             if (array[count].value > array[count+1].value){
-                
                 // Sets the color of the values being compared, and also resets the colors of irrelevant values
                 array.forEach(element => {
                     element.color = SetColor(element.value);
                 });
                 array[count].color = 'red';
                 array[count+1].color = 'red';
-                
                 array = Swap(count, count+1, array)
                 setData(array)
                 setSorted(false);
@@ -115,6 +118,33 @@ function Sorting({pause}) {
       }
     }
 
+    const [smallest, setSmallest] = useState(0);
+    function SelectionSort(array){
+      if (idx <= array.length-1){
+        array.forEach(element => {
+          element.color = SetColor(element.value);
+        });
+        array[smallest].color = 'red';
+        array[idx].color = 'red';
+        array[count].color = 'green';
+        if (count === idx) {
+          setSmallest(idx)
+        }
+        if (count < array.length-1){
+          if (array[smallest].value > array[count+1].value){
+            console.log('new smallest')
+            setSmallest(count+1);
+          }
+          setCount(count+1);
+        } else {
+          array = Swap(idx, smallest, array);
+          setIdx(idx+1);
+          setCount(idx);
+        }
+      }
+      setData(array);
+    }
+
     useEffect(() => {
       resetData();
     }, [])
@@ -122,8 +152,10 @@ function Sorting({pause}) {
     const resetData = (e) => {
       if (e)
         e.preventDefault();
-      setCount(0);
-      setIdx(0);
+        setCount(0);
+        setIdx(0);
+        setSorted(false);
+        setSmallest(0);
 
       // 
       var dataValues = Array.from({length: 80}, ()=> Math.floor(Math.random() * 51));
@@ -137,24 +169,22 @@ function Sorting({pause}) {
       setData(newData);
     }
 
-    const changeAlgo = (e, idx) => {
+    const changeAlgo = (e, index) => {
       e.preventDefault();
+      setAlgo(index);
+
       setCount(0);
       setIdx(0);
-      setAlgo(idx);
       setSorted(false);
+      setSmallest(0);
     }
 
-    const changeSpeed = (e) => {
-      console.log(e)
-    }
-
-    console.log(speed)
     return (
       <div className="container-fluid">
         <div className="row">
           <button onClick={(e)=>changeAlgo(e, 1)} className="col">Bubble Sort</button>
           <button onClick={(e)=>changeAlgo(e, 2)} className="col">Insertion Sort</button>
+          <button onClick={(e)=>changeAlgo(e, 3)} className="col">Selection Sort</button>
         </div>
         <div className="row">
           <button onClick={(e)=>{resetData(e); changeAlgo(e, 0)}} className="col">Reset</button>
@@ -163,8 +193,8 @@ function Sorting({pause}) {
               <h1 className="col-sm-3">Speed:</h1>
               <ReactSlider
               className="horizontal-slider col"
-              thumbClassName="example-thumb"
-              trackClassName="example-track"
+              thumbClassName="thumb"
+              trackClassName="track"
               defaultValue={25}
               min = {1}
               max = {100}
