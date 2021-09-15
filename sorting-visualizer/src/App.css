@@ -1,38 +1,111 @@
-.App {
-  text-align: center;
+:root {
+  --Space-Grey: #363538;
+  --Steel-Grey: #8D8C8A;
+  --Bone-White: #F6F6F6;
+  --Prismarine-Blue: #408697;
+  --Ocean-Blue: #52D6F4;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+body {
+  /* layout settings */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; 
+  background-color: black;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.bar {
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  width: 1vw;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+#Graph {
+  background-color: black;
+  bottom: 0;
+  min-width: 100%;
+  padding-top: 20vh;
+}
+
+button, input[type="submit"], input[type="reset"] {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+button {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 2vw;
+  height: 8vh;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+  border-width: 3px;
+}
+
+button:hover{
+  background-color: white;
+  color: black;
+  transition: 0.5s;
+}
+
+button:active {
+  transform: translateY(10px);
+  transition: 0.5s;
+}
+
+@media screen and (max-width: 600px) {
+  button{
+    font-size: 4vw;
   }
-  to {
-    transform: rotate(360deg);
-  }
+}
+
+.horizontal-slider {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
+.example-thumb {
+  cursor: pointer;
+  position: absolute;
+  z-index: 100;
+  background: #ffffff;
+  border: 5px solid #3774ff;
+  border-radius: 100%;
+  display: block;
+  box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+}
+.example-thumb.active {
+  background-color: grey;
+}
+.example-track {
+  position: relative;
+  background: #ddd;
+}
+.example-track.example-track-0 {
+  background: #83a9ff;
+}
+.horizontal-slider .example-track {
+  top: 20px;
+  height: 4px;
+}
+.horizontal-slider .example-thumb {
+  top: 12px;
+  width: 30px;
+  outline: none;
+  height: 30px;
+  line-height: 60px;
 }
