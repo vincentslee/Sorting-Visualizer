@@ -1,6 +1,9 @@
 import React, {useState, useEffect, useReducer, useRef} from 'react'
 import ReactSlider from 'react-slider'
+import Swap from './Helpers/Swap';
+import SetColor from './Helpers/SetColor';
 
+// Used to rerender every x milliseconds (x being the speed state in this script)
 function useInterval(callback, delay) {
     const savedCallback = useRef();
     useEffect(() => {
@@ -13,25 +16,10 @@ function useInterval(callback, delay) {
       let id = setInterval(tick, delay);
       return () => clearInterval(id);
     }, [delay]);
-  }
+}
 
-  const Slider = () => {
-    return (
-      <ReactSlider
-        className="horizontal-slider"
-        thumbClassName="example-thumb"
-        trackClassName="example-track"
-      />
-    );
-  };
-// Timer component
 function Sorting({pause}) {
-    const [data, setData] = useState([]);
-    const [count, setCount] = useState(0);
-    const [resetCount, setResetCount] = useState(false);
-    const [algo, setAlgo] = useState(0);
-    const [speed, setSpeed] = useState(25)
-    
+
     let resetRef = useRef();
     // Trick to Intialize countRef.current on first render only.
     resetRef.current = resetRef.current || false; 
@@ -41,12 +29,20 @@ function Sorting({pause}) {
         setCount(0);
       }
     });
+
+    // State is used to hold data that needs to be stored between loops
+    const [data, setData] = useState([]);
+    const [count, setCount] = useState(0);
+    const [algo, setAlgo] = useState(0);
+    const [speed, setSpeed] = useState(25)
     useInterval(()=> {
       if (pause) {
         resetRef.current = true;
         return;
       }
       resetRef.current = false;
+
+      // the sorting algorithms are called every tick
       switch(algo){
         case 0:
           break;
@@ -57,66 +53,54 @@ function Sorting({pause}) {
           InsertionSort(data);
           break;
       }
-      if (resetCount === true){
-          setCount(0);
-          setResetCount(false)
-      }
-      
-      // the below value determines the delay between ticks in milliseconds
+      // the below value determines the delay between ticks in milliseconds, as set by 'speed'
     }, pause ? null : speed);
 
     const [sorted, setSorted] = useState(false);
+
     function BubbleSort(array){
-      // our loop
+
+        setCount(count+1)
         if (count < array.length - 1) {
-            // need to mark array[count]
+            // if the next value is smaller, swap the two values
             if (array[count].value > array[count+1].value){
-                // if the next value is smaller, swap the two values
+                
+                // Sets the color of the values being compared, and also resets the colors of irrelevant values
                 array.forEach(element => {
-                    element.color = 'rgb('+element.value*2+','+element.value*3+','+element.value*5+')';
+                    element.color = SetColor(element.value);
                 });
                 array[count].color = 'red';
                 array[count+1].color = 'red';
-                var a = array[count].value;
-                var b = array[count+1].value;
-                array[count].value = b;
-                array[count+1].value = a;
+                
+                array = Swap(count, count+1, array)
                 setData(array)
                 setSorted(false);
             } else {
               array.forEach(element => {
-                element.color = 'rgb('+element.value*2+','+element.value*3+','+element.value*5+')';
+                element.color = SetColor(element.value);
               });
               if (sorted !== true)
                 array[count].color = 'green';
-              
+              setData(array);
             }
         } else {
-            console.log('loop exceeded')
             setSorted(true)
-            setResetCount(true)
-            // check if array is sorted
-            array.forEach(element => {
-              element.color = 'rgb('+element.value*2+','+element.value*3+','+element.value*5+')';
-          });
+            setCount(0)
         }
-        setCount(count+1)
+        
     }
 
     const [idx, setIdx] = useState(0);
     function InsertionSort(array){
       if (idx > 0){
         array.forEach(element => {
-          element.color = 'rgb('+element.value*2+','+element.value*3+','+element.value*5+')';
+          element.color = SetColor(element.value);
         });
-        array[count].color = 'green';
         array[idx].color = 'red';
         array[idx+1].color = 'red';
+        array[count].color = 'green';
         if (array[idx].value > array[idx+1].value){
-          var a = array[idx].value;
-          var b = array[idx+1].value;
-          array[idx].value = b;
-          array[idx+1].value = a;
+          array = Swap(idx, idx+1, array)
           setIdx(idx-1);
         } else {
           setIdx(0)
@@ -125,8 +109,9 @@ function Sorting({pause}) {
       }
       else if (count < array.length - 1){
         setCount(count+1);
-        array[count].color = 'green';
         setIdx(count);
+        array[count].color = 'green';
+        setData(array)
       }
     }
 
@@ -138,13 +123,15 @@ function Sorting({pause}) {
       if (e)
         e.preventDefault();
       setCount(0);
-      setIdx(0)
+      setIdx(0);
+
+      // 
       var dataValues = Array.from({length: 80}, ()=> Math.floor(Math.random() * 51));
       var newData = [{}];
       dataValues.forEach(num => {
           newData.push({
               value: num,
-              color: 'white'
+              color: SetColor(num),
           })
       });
       setData(newData);
@@ -158,6 +145,10 @@ function Sorting({pause}) {
       setSorted(false);
     }
 
+    const changeSpeed = (e) => {
+      console.log(e)
+    }
+
     console.log(speed)
     return (
       <div className="container-fluid">
@@ -167,17 +158,20 @@ function Sorting({pause}) {
         </div>
         <div className="row">
           <button onClick={(e)=>{resetData(e); changeAlgo(e, 0)}} className="col">Reset</button>
-        </div>
-        <div className="row">
-          <h1>Speed:</h1>
-          <ReactSlider
-          className="horizontal-slider"
-          thumbClassName="example-thumb"
-          trackClassName="example-track"
-          defaultValue={25}
-          renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-          onChange={(props, state)=>{setSpeed(state.valueNow)}}
-        />
+          <div className="col" id="Slider">
+            <div className="row">
+              <h1 className="col-sm-3">Speed:</h1>
+              <ReactSlider
+              className="horizontal-slider col"
+              thumbClassName="example-thumb"
+              trackClassName="example-track"
+              defaultValue={25}
+              min = {1}
+              max = {100}
+              onChange={(e)=>setSpeed(e)}
+              />
+            </div>
+          </div>
         </div>
         <div id="Graph" className="row align-items-end justify-content-center">
             {

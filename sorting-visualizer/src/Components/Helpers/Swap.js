@@ -1,8 +1,6 @@
-function Swap(a, b, array){
+export default function Swap(a, b, array){
     var holder = array[a];
     array[a] = array[b];
-    array[b] = array[a];
-    return array
+    array[b] = holder;
+    return array;
 }
-
-export default Swap();

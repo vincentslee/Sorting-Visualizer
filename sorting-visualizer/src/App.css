@@ -27,7 +27,7 @@ body {
   background-color: black;
   bottom: 0;
   min-width: 100%;
-  padding-top: 20vh;
+  padding-top: 5vh;
 }
 
 button, input[type="submit"], input[type="reset"] {
@@ -68,39 +68,45 @@ button:active {
 }
 
 @media screen and (max-width: 600px) {
-  button{
+  button, h1{
     font-size: 4vw;
   }
+}
+
+#Slider {
+  border: 1px solid white;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 2vw;
+  height: 8vh;
+  align-items: center;
 }
 
 .horizontal-slider {
   width: 100%;
   max-width: 500px;
-  margin: auto;
+  margin-left: 10px;
 }
 .example-thumb {
   cursor: pointer;
   position: absolute;
   z-index: 100;
-  background: #ffffff;
-  border: 5px solid #3774ff;
-  border-radius: 100%;
+  background: black;
+  border: 5px solid white;
   display: block;
-  box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
-}
-.example-thumb.active {
-  background-color: grey;
 }
 .example-track {
   position: relative;
-  background: #ddd;
+  background: white;
+  border: 1px solid black;
 }
 .example-track.example-track-0 {
-  background: #83a9ff;
+  background: black;
+  border: 1px solid white;
 }
 .horizontal-slider .example-track {
   top: 20px;
-  height: 4px;
+  height: 10px;
 }
 .horizontal-slider .example-thumb {
   top: 12px;
