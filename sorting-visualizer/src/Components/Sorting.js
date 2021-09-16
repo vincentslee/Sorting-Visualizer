@@ -244,7 +244,6 @@ function Sorting({pause}) {
             {
                 data.map(item =>{
                   try{
-
                     return (<div className="bar" style={{width: 80/arrayLength +'vw', height: item.value*10, backgroundColor: item.color}}></div>);
                   } catch(error){
                     console.log(error);
