@@ -35,6 +35,7 @@ function Sorting({pause}) {
     const [count, setCount] = useState(0);
     const [algo, setAlgo] = useState(0);
     const [speed, setSpeed] = useState(25)
+    const [arrayLength, setArrayLength] = useState(100);
     useInterval(()=> {
       if (pause) {
         resetRef.current = true;
@@ -43,21 +44,43 @@ function Sorting({pause}) {
       resetRef.current = false;
 
       // the sorting algorithms are called every tick
-      switch(algo){
-        case 0:
-          break;
-        case 1:
-          console.log('bubble')
-          BubbleSort(data);
-          break;
-        case 2:
-          console.log('insertion')
-          InsertionSort(data);
-          break;
-        case 3:
-          console.log('selection')
-          SelectionSort(data);
-          break;
+      try{
+
+        switch(algo){
+          case 0:
+            break;
+          case 1:
+            console.log('bubble')
+            BubbleSort(data);
+            break;
+          case 2:
+            console.log('insertion')
+            InsertionSort(data);
+            break;
+          case 3:
+            console.log('selection')
+            SelectionSort(data);
+            break;
+        }
+      } catch(error) {
+        console.log(error)
+      }
+      console.log('tick')
+      // This code dynamically updates the array, and is placed in useInterval so it only runs once per tick
+      if (data.length < arrayLength){
+        console.log('adding')
+        var dataValues = Array.from({length: (arrayLength-data.length)}, ()=> Math.floor(Math.random() * 51));
+        var newData = data;
+        dataValues.forEach(num => {
+            newData.push({
+                value: num,
+                color: SetColor(num),
+            })
+        });
+        setData(newData);
+      } 
+      if (data.length > arrayLength){
+        setData(data.slice(0, arrayLength));
       }
       // the below value determines the delay between ticks in milliseconds, as set by 'speed'
     }, pause ? null : speed);
@@ -67,28 +90,25 @@ function Sorting({pause}) {
     function BubbleSort(array){
         setCount(count+1)
         if (count < array.length - 1) {
+          //array[count].color = 'green';
             // if the next value is smaller, swap the two values
+            array.forEach(element => {
+              element.color = SetColor(element.value);
+            });
             if (array[count].value > array[count+1].value){
                 // Sets the color of the values being compared, and also resets the colors of irrelevant values
-                array.forEach(element => {
-                    element.color = SetColor(element.value);
-                });
                 array[count].color = 'red';
                 array[count+1].color = 'red';
                 array = Swap(count, count+1, array)
-                setData(array)
                 setSorted(false);
             } else {
-              array.forEach(element => {
-                element.color = SetColor(element.value);
-              });
-              if (sorted !== true)
                 array[count].color = 'green';
-              setData(array);
             }
+            setData(array);
         } else {
+            if (sorted !== true)
+              setCount(0)
             setSorted(true)
-            setCount(0)
         }
         
     }
@@ -160,7 +180,7 @@ function Sorting({pause}) {
         setSmallest(0);
 
       // 
-      var dataValues = Array.from({length: 80}, ()=> Math.floor(Math.random() * 51));
+      var dataValues = Array.from({length: arrayLength}, ()=> Math.floor(Math.random() * 51));
       var newData = [{}];
       dataValues.forEach(num => {
           newData.push({
@@ -190,9 +210,23 @@ function Sorting({pause}) {
         </div>
         <div className="row">
           <button onClick={(e)=>{resetData(e); changeAlgo(e, 0)}} className="col">Reset</button>
-          <div className="col" id="Slider">
-            <div className="row">
-              <h1 className="col-sm-3">Speed:</h1>
+          <div className="col Slider">
+            <div className="row align-items-center">
+              <h1 className="col-sm-3">[Bars]</h1>
+              <ReactSlider
+              className="horizontal-slider col"
+              thumbClassName="thumb"
+              trackClassName="track"
+              defaultValue={100}
+              min = {5}
+              max = {200}
+              onChange={(e)=>setArrayLength(e)}
+              />
+            </div>
+          </div>
+          <div className="col align-items-center Slider">
+            <div className="row align-items-center">
+              <h1 className="col-sm-3">[Fast]</h1>
               <ReactSlider
               className="horizontal-slider col"
               thumbClassName="thumb"
@@ -202,13 +236,19 @@ function Sorting({pause}) {
               max = {100}
               onChange={(e)=>setSpeed(e)}
               />
+              <h1 className="col-sm-3">[Slow]</h1>
             </div>
           </div>
         </div>
         <div id="Graph" className="row align-items-end justify-content-center">
             {
                 data.map(item =>{
-                    return (<div className="bar" style={{height: item.value*10, backgroundColor: item.color}}></div>);
+                  try{
+
+                    return (<div className="bar" style={{width: 80/arrayLength +'vw', height: item.value*10, backgroundColor: item.color}}></div>);
+                  } catch(error){
+                    console.log(error);
+                  }
                 })
             }
         </div>

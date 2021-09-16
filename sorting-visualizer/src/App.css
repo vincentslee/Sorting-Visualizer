@@ -20,7 +20,7 @@ body {
   border-color: white;
   border-width: 1px;
   border-style: solid;
-  width: 1vw;
+
 }
 
 #Graph {
@@ -67,13 +67,17 @@ button:active {
   transition: 0.5s;
 }
 
+h1 {
+  font-size: 2vw;
+}
+
 @media screen and (max-width: 600px) {
   button, h1{
-    font-size: 4vw;
+    font-size: 2vw;
   }
 }
 
-#Slider {
+.Slider {
   border: 1px solid white;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.1);
