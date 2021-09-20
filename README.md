@@ -18,7 +18,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/vincentslee/Sorting-Visualizer">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://www.vincentlee.dev/static/media/logo.4dc98c0e.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Sorting Algorithm Visualizer</h3>
