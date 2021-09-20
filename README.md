@@ -70,7 +70,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project was made for my portfolio. 
+This project was made for my portfolio, I created it mainly using React.js. The project is fairly self-explanatory and very visual, so please visit the live site at https://vincentslee.github.io/Sorting-Visualizer/ to best understand it. 
 
 ### Built With
 
